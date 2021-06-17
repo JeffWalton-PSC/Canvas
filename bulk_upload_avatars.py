@@ -17,7 +17,7 @@ parser = ap.ArgumentParser(description="Adds student photos to Canvas " +
 parser.add_argument("-d", "--debug",
                     help="set level of logging to log file as DEBUG, default=False(level=INFO)",
                     action="store_true")
-parser.add_argument("-H", "--host", type=str, choices=['PROD', 'TEST', 'BETA'],
+parser.add_argument("-H", type=str, choices=['PROD', 'TEST', 'BETA'],
                     help="canvas host, default='BETA'")
 parser.add_argument("file", type=str, help="file containing column of student id numbers")
 
@@ -68,6 +68,7 @@ logger.add(
 logger.add(sys.stderr, level="INFO")
 logger.info(f"\n\nStart")
 logger.info(f"API_URL: {API_URL}")
+logger.debug(f"args: {args}")
 
 header = {'Authorization' : f'Bearer {API_TOKEN}'}
 logger.debug(header)

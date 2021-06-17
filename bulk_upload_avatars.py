@@ -33,9 +33,6 @@ if not API_TOKEN:
 
 ##############################################################################
 ##############################################################################
-################ Don't edit anything past here unless you know what you are doing.
-################ NOTE: No offense, you probably do know what you're doing.  This is for
-################ those that do not.  
 
 
 logger.remove()

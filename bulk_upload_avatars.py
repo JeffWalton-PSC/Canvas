@@ -3,20 +3,47 @@
 # Based on this script: 
 # https://github.com/unsupported/canvas/blob/master/api/bulk_assign_avatars/python/bulk_upload_avatars.py
 
+import argparse as ap
 import csv, requests, os, sys
 import mimetypes
 
 from loguru import logger
 from pathlib import Path
 
-## TO DO:  Add CLI interface for logger debug mode, input csv file, canvas_host identifier
+
+parser = ap.ArgumentParser(description="Adds student photos to Canvas " +
+                           "and sets the uploaded image as the curent avatar in Canvas. " +
+                           "Reads student's SIS ids from required csv file. ")
+parser.add_argument("-d", "--debug",
+                    help="set level of logging to log file as DEBUG, default=False(level=INFO)",
+                    action="store_true")
+parser.add_argument("-H", "--host", type=str, choices=['PROD', 'TEST', 'BETA'],
+                    help="canvas host, default='BETA'")
+parser.add_argument("file", type=str, help="file containing column of student id numbers")
+
+args = parser.parse_args()
+if args.debug:
+    log_level = "DEBUG"
+else:
+    log_level = "INFO"
+# valid canvas_host are: production="", test="-TEST", beta="-BETA"
+if args.host == "PROD":
+    canvas_host = ""
+elif args.host == "TEST":
+    canvas_host = "-TEST"
+else:
+    canvas_host = "-BETA"
+csv_filename = args.file
+
 
 working_path = Path(r"./")
-csv_filename = "avatar_upload.csv"
 images_url = "https://selfservice.paulsmiths.edu/SelfService/PeopleImages/"
 # images_path = Path(r"\\psc-data\E\Applications\Starfish\Files\prod\sisdatafiles\studentFiles\studentPhotos")  
 log_filename = "upload_avatars_log.txt"
-canvas_host = ""  # valid hosts are: production="", test="-TEST", beta="-BETA" 
+
+
+##############################################################################
+##############################################################################
 
 # Canvas API URL
 API_URL = os.environ.get(f"CANVAS{canvas_host}_API_URL")
@@ -31,16 +58,12 @@ if not API_TOKEN:
 #print(f"API_TOKEN: {API_TOKEN}")
 
 
-##############################################################################
-##############################################################################
-
-
 logger.remove()
 logger.add(
     f"{working_path/ 'logs' / log_filename}",
     rotation="monthly",
     format="{time:YYYY-MM-DD at HH:mm:ss} | {level} | {name} | {message}",
-    level="INFO"
+    level=log_level
 )
 logger.add(sys.stderr, level="INFO")
 logger.info(f"\n\nStart")

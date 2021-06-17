@@ -1,0 +1,14 @@
+usage: bulk_upload_avatars.py [-h] [-d] [-H {PROD,TEST,BETA}] file
+
+Add student photos to Canvas. Set the uploaded image as the curent avatar in
+Canvas. Reads student's SIS ids from csv file.
+
+positional arguments:
+  file                  file containing column of student id numbers
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -d, --debug           set level of logging to log file as DEBUG,
+                        default=False(level=INFO)
+  -H {PROD,TEST,BETA}, --host {PROD,TEST,BETA}
+                        canvas host, default='BETA'
